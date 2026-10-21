@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar sesión | Taller{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-dark text-white fw-bold py-3">Iniciar sesión</div>
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% if form.errors %}
+          <div class="alert alert-danger py-2">Usuario o contraseña incorrectos.</div>
+          {% endif %}
+          <div class="mb-3">
+            <label for="id_username" class="form-label fw-semibold text-secondary">Usuario</label>
+            <input type="text" name="username" id="id_username" class="form-control" autofocus required />
+          </div>
+          <div class="mb-3">
+            <label for="id_password" class="form-label fw-semibold text-secondary">Contraseña</label>
+            <input type="password" name="password" id="id_password" class="form-control" required />
+          </div>
+          <input type="hidden" name="next" value="{{ next }}" />
+          <button type="submit" class="btn btn-dark w-100 fw-bold">Ingresar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

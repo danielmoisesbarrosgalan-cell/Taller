@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes | Taller{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-dark fw-bold mb-0">Clientes registrados</h2>
+    <a href="{% url 'cliente:crear_cliente' %}" class="btn btn-dark fw-bold shadow-sm">Agregar cliente</a>
+  </div>
+
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover table-striped align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th class="ps-3">ID</th>
+          <th>Nombre</th>
+          <th>Documento</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Usuario</th>
+          <th class="text-center pe-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cliente in clientes %}
+        <tr>
+          <td class="fw-semibold ps-3 text-secondary">{{ cliente.id_cliente }}</td>
+          <td>{{ cliente.nombre }}</td>
+          <td>{{ cliente.documento }}</td>
+          <td>{{ cliente.telefono|default:"—" }}</td>
+          <td>{{ cliente.email|default:"—" }}</td>
+          <td>{{ cliente.usuario|default:"—" }}</td>
+          <td class="text-center pe-3 text-nowrap">
+            <a href="{% url 'cliente:editar_cliente' cliente.id_cliente %}" class="btn btn-warning btn-sm me-1 fw-medium shadow-sm">Editar</a>
+            <a href="{% url 'cliente:eliminar_cliente' cliente.id_cliente %}" class="btn btn-danger btn-sm fw-medium shadow-sm">Eliminar</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center text-muted py-4">No hay clientes registrados en el sistema.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4">
+    <a href="{% url 'index' %}" class="btn btn-dark shadow-sm">Volver al inicio</a>
+  </div>
+</div>
+{% endblock %}

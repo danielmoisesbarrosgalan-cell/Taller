@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Taller{% endblock %}</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+      <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold" href="{% url 'index' %}">Taller Mecánico</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            {% if es_admin or es_recepcionista %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" id="navClientes" role="button" data-bs-toggle="dropdown" aria-expanded="false">CLIENTES</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navClientes">
+                <li><a class="dropdown-item" href="{% url 'cliente:lista_clientes' %}">Consultar clientes</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="{% url 'cliente:crear_cliente' %}">Crear cliente</a></li>
+              </ul>
+            </li>
+            {% endif %}
+            {% if es_admin or es_recepcionista %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" id="navVehiculos" role="button" data-bs-toggle="dropdown" aria-expanded="false">VEHÍCULOS</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navVehiculos">
+                <li><a class="dropdown-item" href="{% url 'vehiculo:lista_vehiculos' %}">Consultar vehículos</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="{% url 'vehiculo:crear_vehiculo' %}">Crear vehículo</a></li>
+              </ul>
+            </li>
+            {% endif %}
+            {% if es_admin %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" id="navMecanicos" role="button" data-bs-toggle="dropdown" aria-expanded="false">MECÁNICOS</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navMecanicos">
+                <li><a class="dropdown-item" href="{% url 'mecanico:lista_mecanicos' %}">Consultar mecánicos</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="{% url 'mecanico:crear_mecanico' %}">Crear mecánico</a></li>
+              </ul>
+            </li>
+            {% endif %}
+            {% if es_admin %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" id="navServicios" role="button" data-bs-toggle="dropdown" aria-expanded="false">SERVICIOS</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navServicios">
+                <li><a class="dropdown-item" href="{% url 'servicio:lista_servicios' %}">Consultar servicios</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="{% url 'servicio:crear_servicio' %}">Crear servicio</a></li>
+              </ul>
+            </li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" id="navOrdenes" role="button" data-bs-toggle="dropdown" aria-expanded="false">ÓRDENES</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navOrdenes">
+                <li><a class="dropdown-item" href="{% url 'orden:lista_ordenes' %}">Consultar órdenes</a></li>
+                {% if es_admin or es_recepcionista %}
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="{% url 'orden:crear_orden' %}">Nueva orden</a></li>
+                {% endif %}
+              </ul>
+            </li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li class="nav-item text-secondary small px-lg-3">{{ user.username }}</li>
+            <li class="nav-item">
+              <form method="post" action="{% url 'logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-light btn-sm">Salir</button>
+              </form>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="btn btn-outline-light btn-sm" href="{% url 'login' %}">Iniciar sesión</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container px-4">
+      {% if messages %}
+      {% for mensaje in messages %}
+      <div class="alert alert-{{ mensaje.tags }} alert-dismissible fade show" role="alert">
+        {{ mensaje }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% block content %} {% endblock %}
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
